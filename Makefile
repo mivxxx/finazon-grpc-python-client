@@ -1,13 +1,26 @@
 PATH_THIS:=$(realpath $(dir $(lastword ${MAKEFILE_LIST})))
 
-PATH_DIST:=${PATH_THIS}/dist
+PATH_DIST:=${PATH_THIS}/src/finazon-grpc-python-client
 
-PYTHON_VIRTUAL_ENV:=${PATH_THIS}/venv
+PYTHON_VIRTUAL_ENV:=${PATH_THIS}/.venv
 PYTHON:=${PYTHON_VIRTUAL_ENV}/bin/python3
 PIP:=${PYTHON_VIRTUAL_ENV}/bin/pip
+POETRY_VERSION=1.6.1
+POETRY=${PYTHON_VIRTUAL_ENV}/bin/poetry
+
+.PHONY: install
+install:
+	@echo "Create python virual enviroment ..."
+	@python3 -m venv ${PYTHON_VIRTUAL_ENV}
+	@echo "Install package dependencies ..."
+	@mkdir -p ${PATH_DIST}
+	@touch ${PATH_DIST}/__init__.py
+	@${PIP} install poetry==${POETRY_VERSION}
+	@${POETRY} install
 
 .PHONY: generate
-generate: ${PYTHON_VIRTUAL_ENV}/bin/activate
+generate:
+	make install
 	@mkdir -p ${PATH_DIST}
 	@${PYTHON} \
 	  -m grpc_tools.protoc \
@@ -18,20 +31,27 @@ generate: ${PYTHON_VIRTUAL_ENV}/bin/activate
 	  --mypy_out=${PATH_DIST} \
 	  ${PATH_THIS}/proto/*.proto
 
-${PYTHON_VIRTUAL_ENV}/bin/activate: ${PATH_THIS}/requirements.txt
-	@echo "Create python virual enviroment ..."
-	@python -m venv ${PYTHON_VIRTUAL_ENV}
-	@echo "Install python dependencies ..."
-	@${PIP} install --disable-pip-version-check -q -r ${PATH_THIS}/requirements.txt
-
-
 .PHONY: bump_version
 bump_version:
-	@echo "not implemented"; exit 1
+	@sed -i 's/version = [^ ]*/version = "${VERSION}"/' ${PATH_THIS}/pyproject.toml
+
+.PHONY: build
+build:
+	make generate
+	@${POETRY} build
 
 .PHONY: publish
 publish:
-	@echo "not implemented"; exit 1
+	@${POETRY} config pypi-token.pypi ${PYPI_TOKEN}
+	make build
+	@${POETRY} publish
+
+.PHONY: publish_test
+publish_test:
+	@${POETRY} config repositories.test-pypi https://test.pypi.org/legacy/
+	@${POETRY} config pypi-token.test-pypi ${PYPI_TOKEN}
+	make build
+	@${POETRY} publish -r test-pypi
 
 .PHONY: clean
 clean:
