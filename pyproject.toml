@@ -1,7 +1,8 @@
 [tool.poetry]
 name = "finazon-grpc-python-client"
-packages = [{include = "finazon-grpc-python-client", from = "src"}]
-version = "1.0.2"
+packages = [{include = "finazon-grpc-python-client"}]
+include = ["requirements.txt", "finazon-grpc-python-client/*.py"]
+version = "1.0.4"
 description = "Finazon gRPC client library for Python"
 authors = ["Finazon <team@finazon.io>"]
 readme = "README.md"

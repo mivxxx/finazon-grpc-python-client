@@ -1,4 +1,4 @@
 dist
 .venv
-src
+finazon-grpc-python-client
 .idea

@@ -1,6 +1,6 @@
 PATH_THIS:=$(realpath $(dir $(lastword ${MAKEFILE_LIST})))
 
-PATH_DIST:=${PATH_THIS}/src/finazon-grpc-python-client
+PATH_DIST:=${PATH_THIS}/finazon-grpc-python-client
 
 PYTHON_VIRTUAL_ENV:=${PATH_THIS}/.venv
 PYTHON:=${PYTHON_VIRTUAL_ENV}/bin/python3
