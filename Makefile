@@ -1,6 +1,7 @@
 PATH_THIS:=$(realpath $(dir $(lastword ${MAKEFILE_LIST})))
 
-PATH_DIST:=${PATH_THIS}/finazon-grpc-python-client
+PATH_DIST:=${PATH_THIS}/finazon_grpc_python_client
+PATH_PROTO:=proto/finazon_grpc_python_client/*.proto
 
 PYTHON_VIRTUAL_ENV:=${PATH_THIS}/.venv
 PYTHON:=${PYTHON_VIRTUAL_ENV}/bin/python3
@@ -24,12 +25,12 @@ generate:
 	@mkdir -p ${PATH_DIST}
 	@${PYTHON} \
 	  -m grpc_tools.protoc \
-	  -I${PATH_THIS}/proto \
-	  --python_out=${PATH_DIST} \
-	  --grpc_python_out=${PATH_DIST} \
+	  -I./proto \
+	  --python_out=. \
+	  --grpc_python_out=. \
 	  --plugin=protoc-gen-mypy=${PYTHON_VIRTUAL_ENV}/bin/protoc-gen-mypy \
-	  --mypy_out=${PATH_DIST} \
-	  ${PATH_THIS}/proto/*.proto
+	  --mypy_out=. \
+	  ${PATH_PROTO}
 
 .PHONY: bump_version
 bump_version:
