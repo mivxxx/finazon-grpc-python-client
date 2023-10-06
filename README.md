@@ -12,7 +12,7 @@ pip install finazon-grpc-python-client
 ```
 Via poetry
 ```shell
-poetry install finazon-grpc-python-client
+poetry add finazon-grpc-python-client
 ```
 
 ## Usage example
