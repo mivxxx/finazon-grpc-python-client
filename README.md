@@ -2,7 +2,7 @@
 Finazon gRPC client library for Python
 
 ## Requirements
-Python >= 3.10
+Python >= 3.8
 
 ## Installation
 
@@ -15,5 +15,5 @@ Via poetry
 poetry add finazon-grpc-python-client
 ```
 
-## Usage example
-See examples directory
+## Usage examples
+Usage examples can be found [here](https://github.com/mivxxx/finazon-grpc-python-client/tree/main/examples)
